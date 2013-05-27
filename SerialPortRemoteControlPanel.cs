@@ -19,7 +19,7 @@ using SDRSharp.CollapsiblePanel;
 using SDRSharp.Common;
 using SDRSharp.Radio;
 
-namespace SDRSharp.SerialPortControl
+namespace SDRSharp.SerialPortRemoteControl
 {
     [DesignTimeVisible(true)]
     [Category("SDRSharp")]
@@ -31,9 +31,8 @@ namespace SDRSharp.SerialPortControl
         private const String Copyright = "Copyright © Ido Roseman 2013";
         private const String NumericFormat = "N0"; 
         private readonly ISharpControl _controlInterface;
-        private Form _mf;
-        private int[] Frequencies = { 137200000, 137100000, 137400000, 137500000, 137620000, 137912500, 137300000, 137700000, 137800000, 137850000 };
-        private string[] names = { "", "NOAA 19", "", "", "NOAA15", "NOAA 18", "", "", "", "" };
+        private RemoteControlProtocol _protocol;
+
 
         /// <summary>
         /// Constructor.  
@@ -49,8 +48,6 @@ namespace SDRSharp.SerialPortControl
             }
             catch (Exception ex)
             {
-                //frequencyNumericUpDown.Enabled = false;
-                //centerFreqNumericUpDown.Enabled = false;
                 String msg = String.Format("An error occurred.  The error was: \n\r{0}",
                                            ex.Message + "\n\r" + ex.StackTrace.Trim());
                 MessageBox.Show(msg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -64,7 +61,7 @@ namespace SDRSharp.SerialPortControl
         {
             try
             {
-                _mf = ParentForm;
+                // _mf = ParentForm;
                 ////trim parent control height to remove excess bottom margin
                 //if (Utils.GetBooleanSetting("freqMgrTrimPanelHeight"))
                 //{
@@ -80,6 +77,8 @@ namespace SDRSharp.SerialPortControl
                 //frequencyNumericUpDown.Increment = _controlInterface.StepSize;
                 //centerFreqNumericUpDown.Value = _controlInterface.CenterFrequency;
                 //centerFreqNumericUpDown.Increment = _controlInterface.StepSize;
+                ProtocolSelectionBox.Items.Add("APT");
+                ProtocolSelectionBox.Items.Add("Uniden");
                 string[] theSerialPortNames = System.IO.Ports.SerialPort.GetPortNames();
                 PortSelectionBox.Items.AddRange(theSerialPortNames);
             }
@@ -145,33 +144,48 @@ namespace SDRSharp.SerialPortControl
         {
             if (EnableBox.Checked)
             {
+                switch (ProtocolSelectionBox.SelectedItem.ToString())
+                {
+                    case "APT" :
+                        _protocol = new ProtocolAPT(_controlInterface);
+                        break;
+                    case "Uniden" :
+                        _protocol = new ProtocolUniden(_controlInterface);
+                        break;
+                }
+                if (_protocol != null)
+                {
+                    _protocol.OnDataToSend += SendData;
+                    _protocol.OnShowMessage += ShowMessage;
+                }
                 serialPort1.Open();
                 PortSelectionBox.Enabled = false;
+                ProtocolSelectionBox.Enabled = false;
             }
             else
             {
                 serialPort1.Close();
                 PortSelectionBox.Enabled = true;
+                ProtocolSelectionBox.Enabled = true;
             }
 
         }
 
+        private void ShowMessage(string data)
+        {
+            textBox1.Text = data;
+        }
+
+        private void SendData(string data)
+        {
+            serialPort1.Write(data);
+        }
+
         private void serialPort1_DataReceived(object sender, System.IO.Ports.SerialDataReceivedEventArgs e)
         {
-            string msg = serialPort1.ReadExisting().ToUpper();
-            textBox1.Text = msg;
-            if (msg[0] == 'S') // scan command
-                msg = msg.Remove(0, 1);
-
-            if (msg.StartsWith("F")) // freq command
-            {
-                int index = int.Parse(msg.Substring(1, 1));
-                _controlInterface.CenterFrequency = (long)137500000;
-                _controlInterface.Frequency = (long)(Frequencies[index] );
-                _controlInterface.DetectorType = DetectorType.NFM;
-                _controlInterface.FilterBandwidth = 45000;
-                textBox1.Text += " => " + names[index];
-            }
+            string msg = serialPort1.ReadExisting();
+            if (_protocol != null)
+                _protocol.DataReceived(msg);
         }
 
     }

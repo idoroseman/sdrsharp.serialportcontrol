@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Drawing;
-namespace SDRSharp.SerialPortControl
+namespace SDRSharp.SerialPortRemoteControl
 {
     partial class SerialPortControlCollapsiblePanel
     {
@@ -35,7 +35,7 @@ namespace SDRSharp.SerialPortControl
         {
             this.components = new System.ComponentModel.Container();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.ProtocolSelectionBox = new System.Windows.Forms.ComboBox();
             this.PortSelectionBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -49,11 +49,11 @@ namespace SDRSharp.SerialPortControl
             // 
             // comboBox1
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(62, 40);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 0;
+            this.ProtocolSelectionBox.FormattingEnabled = true;
+            this.ProtocolSelectionBox.Location = new System.Drawing.Point(62, 40);
+            this.ProtocolSelectionBox.Name = "comboBox1";
+            this.ProtocolSelectionBox.Size = new System.Drawing.Size(121, 21);
+            this.ProtocolSelectionBox.TabIndex = 0;
             // 
             // PortSelectionBox
             // 
@@ -111,7 +111,7 @@ namespace SDRSharp.SerialPortControl
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PortSelectionBox);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.ProtocolSelectionBox);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "SerialPortControlCollapsiblePanel";
             this.Size = new System.Drawing.Size(220, 144);
@@ -123,7 +123,7 @@ namespace SDRSharp.SerialPortControl
         #endregion
 
         private System.IO.Ports.SerialPort serialPort1;
-        private ComboBox comboBox1;
+        private ComboBox ProtocolSelectionBox;
         private ComboBox PortSelectionBox;
         private Label label1;
         private Label label2;

@@ -8,8 +8,8 @@
     <ProjectGuid>{785AAA3F-DAA4-4A1F-8345-99B68BCA6C1A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SDRSharp.SerialPortControl</RootNamespace>
-    <AssemblyName>SDRSharp.SerialPortControl</AssemblyName>
+    <RootNamespace>SDRSharp.SerialPortRemoteControl</RootNamespace>
+    <AssemblyName>SDRSharp.SerialPortRemoteControl</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -79,20 +79,22 @@
   <ItemGroup>
     <Reference Include="SDRSharp.CollapsiblePanel, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86" />
     <Reference Include="SDRSharp.Common, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86" />
-    <Reference Include="SDRSharp.Radio, Version=0.0.0.0, Culture=neutral, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SerialPortControlPanel.cs">
+    <Compile Include="ProtocolAPT.cs" />
+    <Compile Include="ProtocolUniden.cs" />
+    <Compile Include="RemoteControlProtocol.cs" />
+    <Compile Include="SerialPortRemoteControlPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="SerialPortControlPanel.Designer.cs">
-      <DependentUpon>SerialPortControlPanel.cs</DependentUpon>
+    <Compile Include="SerialPortRemoteControlPanel.Designer.cs">
+      <DependentUpon>SerialPortRemoteControlPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="SerialPortControlPlugin.cs" />
+    <Compile Include="SerialPortRemoteControlPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -101,13 +103,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="SerialPortControlPanel.resx">
-      <DependentUpon>SerialPortControlPanel.cs</DependentUpon>
+    <EmbeddedResource Include="SerialPortRemoteControlPanel.resx">
+      <DependentUpon>SerialPortRemoteControlPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Radio\SDRSharp.Radio.csproj">
+      <Project>{1e08e7fd-5a13-454d-adbd-c1a0b75ecf2d}</Project>
+      <Name>SDRSharp.Radio</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

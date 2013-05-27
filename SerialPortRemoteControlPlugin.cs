@@ -6,9 +6,9 @@
 using System.Windows.Forms;
 using SDRSharp.Common;
 
-namespace SDRSharp.SerialPortControl
+namespace SDRSharp.SerialPortRemoteControl
 {
-    public class SerialPortControlPlugin : ISharpPlugin
+    public class SerialPortRemoteControlPlugin : ISharpPlugin
     {
         private const string MyDisplayName = "Serial Port Control";
         private ISharpControl _controlInterface;
